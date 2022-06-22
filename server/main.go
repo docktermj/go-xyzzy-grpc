@@ -9,7 +9,7 @@ import (
 
 	"github.com/docktermj/g2-sdk-go/g2diagnostic"
 	"github.com/docktermj/g2-sdk-go/g2engine"
-	pb "github.com/docktermj/go-xyzzy-grpc/g2diagnostic"
+	//	pb "github.com/docktermj/go-xyzzy-grpc/g2diagnostic"
 	"github.com/docktermj/go-xyzzy-helpers/g2configuration"
 	"github.com/docktermj/go-xyzzy-helpers/logger"
 	"google.golang.org/grpc"

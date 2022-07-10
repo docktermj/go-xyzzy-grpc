@@ -1,4 +1,4 @@
-module github.com/docktermj/go-xyzzy-grpc/v2
+module github.com/docktermj/go-xyzzy-grpc
 
 go 1.18
 
@@ -12,8 +12,8 @@ require (
 require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/jstemmer/go-junit-report v1.0.0 // indirect
-	golang.org/x/net v0.0.0-20220622184535-263ec571b305 // indirect
-	golang.org/x/sys v0.0.0-20220622161953-175b2fd9d664 // indirect
+	golang.org/x/net v0.0.0-20220708220712-1185a9018129 // indirect
+	golang.org/x/sys v0.0.0-20220708085239-5a0f0661e09d // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/genproto v0.0.0-20220622171453-ea41d75dfa0f // indirect
+	google.golang.org/genproto v0.0.0-20220708155623-50e5f4832e73 // indirect
 )

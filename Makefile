@@ -195,7 +195,8 @@ test:
 
 .PHONY: run
 run:
-	@target/linux/$(PROGRAM_NAME)
+	go run server/main.go
+#	@target/linux/$(PROGRAM_NAME)
 	
 # -----------------------------------------------------------------------------
 # docker-build

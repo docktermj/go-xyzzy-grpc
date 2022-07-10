@@ -7,10 +7,10 @@ import (
 	"log"
 	"net"
 
-	"github.com/docktermj/g2-sdk-go/g2diagnostic"
-	"github.com/docktermj/g2-sdk-go/g2engine"
+	//	"github.com/docktermj/g2-sdk-go/g2diagnostic"
+	//	"github.com/docktermj/g2-sdk-go/g2engine"
 	pb "github.com/docktermj/go-xyzzy-grpc/g2diagnostic"
-	"github.com/docktermj/go-xyzzy-helpers/g2configuration"
+	//	"github.com/docktermj/go-xyzzy-helpers/g2configuration"
 	"github.com/docktermj/go-xyzzy-helpers/logger"
 	"google.golang.org/grpc"
 )
@@ -21,11 +21,11 @@ var (
 
 // server is used to implement helloworld.GreeterServer.
 type server struct {
-	pb.UnimplementedGreeterServer
+	pb.UnimplementedG2DiagnosticServer
 }
 
 func (s *server) Init(ctx context.Context, in *pb.InitRequest) (*pb.Empty, error) {
-	log.Printf("Received: %v", in.GetName())
+	log.Printf("Received: %v", in.GetModuleName())
 	return &pb.Empty{}, nil
 }
 
@@ -47,7 +47,7 @@ func main() {
 	// Create server.
 
 	s := grpc.NewServer()
-	pb.RegisterGreeterServer(s, &server{})
+	pb.RegisterG2DiagnosticServer(s, &server{})
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

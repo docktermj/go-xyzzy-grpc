@@ -47,18 +47,22 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	// Create Parameters.
+	// Create request parameters.
 
-	moduleName := "Test module name"
-	var verboseLogging int32 = 0 // 0 for no Senzing logging; 1 for logging
 	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
 	if jsonErr != nil {
 		log.Fatalf("Could not build Configuration JSON: %v", jsonErr)
 	}
 
+	initRequest := pb.InitRequest{
+		ModuleName:     "Test module name",
+		IniParams:      iniParams,
+		VerboseLogging: int32(0), // 0 for no Senzing logging; 1 for logging
+	}
+
 	// Contact the server and print out its response.
 
-	result, err := g2diagnosticClient.Init(ctx, &pb.InitRequest{ModuleName: moduleName, IniParams: iniParams, VerboseLogging: verboseLogging})
+	result, err := g2diagnosticClient.Init(ctx, &initRequest)
 	if err != nil {
 		logger.Fatalf("could not Init: %v", err)
 	}

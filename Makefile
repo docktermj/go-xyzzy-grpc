@@ -193,13 +193,13 @@ test:
 # Run
 # -----------------------------------------------------------------------------
 
-.PHONY: run-client
-run-client:
-	go run client/main.go
+.PHONY: run-g2diagnostic-client
+run-g2diagnostic-client:
+	go run g2diagnostic-client/main.go
 
-.PHONY: run-server
-run-server:
-	go run server/main.go
+.PHONY: run-g2diagnostic-server
+run-g2diagnostic-server:
+	go run g2diagnostic-server/main.go
 	
 # -----------------------------------------------------------------------------
 # docker-build

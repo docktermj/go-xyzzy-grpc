@@ -8,11 +8,10 @@ import (
 	"log"
 	"net"
 	"runtime"
+	"strconv"
 
 	"github.com/docktermj/g2-sdk-go/g2diagnostic"
-	//	"github.com/docktermj/g2-sdk-go/g2engine"
 	pb "github.com/docktermj/go-xyzzy-grpc/g2diagnostic"
-	//	"github.com/docktermj/go-xyzzy-helpers/g2configuration"
 	"github.com/docktermj/go-xyzzy-helpers/logger"
 	"github.com/docktermj/go-xyzzy-helpers/logmessage"
 	"google.golang.org/grpc"
@@ -34,14 +33,17 @@ func traceEnter(messageNumber int, request interface{}) {
 
 		// Get calling function name.
 
-		pc, _, _, _ := runtime.Caller(1)
-		functionName := runtime.FuncForPC(pc).Name()
+		programCounter, file, line, _ := runtime.Caller(1)
+		functionName := runtime.FuncForPC(programCounter).Name()
 
-		// Simplify request for logging.
+		// Assemble values to be logged.
 
 		var jsonString map[string]string
 		requestAsJson, _ := json.Marshal(request)
 		json.Unmarshal([]byte(requestAsJson), &jsonString)
+		jsonString["runtimeFile"] = file
+		jsonString["runtimeFunction"] = functionName
+		jsonString["runtimeLine"] = strconv.Itoa(line)
 
 		// Construct message.
 
@@ -63,14 +65,17 @@ func traceExit(messageNumber int, response interface{}) {
 
 		// Get calling function name.
 
-		pc, _, _, _ := runtime.Caller(1)
-		functionName := runtime.FuncForPC(pc).Name()
+		programCounter, file, line, _ := runtime.Caller(1)
+		functionName := runtime.FuncForPC(programCounter).Name()
 
-		// Simplify response for logging.
+		// Assemble values to be logged.
 
 		var jsonString map[string]string
 		responseAsJson, _ := json.Marshal(response)
 		json.Unmarshal([]byte(responseAsJson), &jsonString)
+		jsonString["runtimeFile"] = file
+		jsonString["runtimeFunction"] = functionName
+		jsonString["runtimeLine"] = strconv.Itoa(line)
 
 		// Construct message.
 

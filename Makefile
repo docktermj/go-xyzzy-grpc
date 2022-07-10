@@ -193,10 +193,13 @@ test:
 # Run
 # -----------------------------------------------------------------------------
 
-.PHONY: run
-run:
+.PHONY: run-client
+run-client:
+	go run client/main.go
+
+.PHONY: run-server
+run-server:
 	go run server/main.go
-#	@target/linux/$(PROGRAM_NAME)
 	
 # -----------------------------------------------------------------------------
 # docker-build

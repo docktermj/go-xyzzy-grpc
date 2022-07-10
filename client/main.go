@@ -1,22 +1,8 @@
 /*
  *
- * Copyright 2015 gRPC authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
  */
 
-// Package main implements a client for Greeter service.
+// Package main implements a client for the service.
 package main
 
 import (
@@ -32,13 +18,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	defaultName = "world"
-)
-
 var (
-	addr = flag.String("addr", "localhost:50051", "the address to connect to")
-	name = flag.String("name", defaultName, "Name to greet")
+	grpcAddress = flag.String("addr", "localhost:50051", "the address to connect to")
 )
 
 func main() {
@@ -48,18 +29,25 @@ func main() {
 	log.SetFlags(log.Llongfile | log.Ldate | log.Lmicroseconds | log.LUTC)
 	logger.SetLevel(logger.LevelInfo)
 
-	flag.Parse()
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
-	c := pb.NewG2DiagnosticClient(conn)
+	// Quick-and-dirty command line parameters. (Replace with Viper)
 
-	// Contact the server and print out its response.
+	flag.Parse()
+
+	// Set up a connection and client to the gRPC server.
+
+	grpcConnection, err := grpc.Dial(*grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Did not connect: %v", err)
+	}
+	defer grpcConnection.Close()
+	g2diagnosticClient := pb.NewG2DiagnosticClient(grpcConnection)
+
+	// Create a context.
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
+
+	// Create Parameters.
 
 	moduleName := "Test module name"
 	var verboseLogging int32 = 0 // 0 for no Senzing logging; 1 for logging
@@ -68,9 +56,11 @@ func main() {
 		log.Fatalf("Could not build Configuration JSON: %v", jsonErr)
 	}
 
-	r, err := c.Init(ctx, &pb.InitRequest{ModuleName: moduleName, IniParams: iniParams, VerboseLogging: verboseLogging})
+	// Contact the server and print out its response.
+
+	result, err := g2diagnosticClient.Init(ctx, &pb.InitRequest{ModuleName: moduleName, IniParams: iniParams, VerboseLogging: verboseLogging})
 	if err != nil {
 		logger.Fatalf("could not Init: %v", err)
 	}
-	logger.Infof("Result: %v", r)
+	logger.Infof("Result: %v", result)
 }

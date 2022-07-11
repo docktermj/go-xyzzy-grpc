@@ -195,11 +195,11 @@ test:
 
 .PHONY: run-g2diagnostic-client
 run-g2diagnostic-client:
-	go run g2diagnostic-client/main.go
+	go run g2diagnosticclient/main.go
 
 .PHONY: run-g2diagnostic-server
 run-g2diagnostic-server:
-	go run g2diagnostic-server/main.go
+	go run g2diagnosticserver/main.go
 	
 # -----------------------------------------------------------------------------
 # docker-build

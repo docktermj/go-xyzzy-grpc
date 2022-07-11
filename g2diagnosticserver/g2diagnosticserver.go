@@ -16,6 +16,11 @@ import (
 // Internal methods - names begin with lower case
 // ----------------------------------------------------------------------------
 
+func getG2diagnostic() *g2diagnostic.G2diagnosticImpl {
+	result := g2diagnostic.G2diagnosticImpl{}
+	return &result
+}
+
 func traceEnter(messageNumber int, request interface{}) {
 	if logger.IsTrace() {
 
@@ -84,9 +89,20 @@ func traceExit(messageNumber int, response interface{}) {
 // Interface methods
 // ----------------------------------------------------------------------------
 
+func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *pb.CheckDBPerfRequest) (*pb.CheckDBPerfResponse, error) {
+	traceEnter(5010, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.CheckDBPerf(ctx, int(request.SecondsToRun))
+	response := pb.CheckDBPerfResponse{
+		Result: result,
+	}
+	traceExit(5011, response)
+	return &response, err
+}
+
 func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.Empty, error) {
 	traceEnter(5055, request)
-	g2diagnostic := g2diagnostic.G2diagnosticImpl{}
+	g2diagnostic := getG2diagnostic()
 	err := g2diagnostic.Init(ctx, request.ModuleName, request.IniParams, int(request.VerboseLogging))
 	response := pb.Empty{}
 	traceExit(5056, response)

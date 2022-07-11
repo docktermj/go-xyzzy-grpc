@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.1
-// source: g2diagnostic/g2diagnostic.proto
+// source: g2diagnostic.proto
 
 package g2diagnostic
 
@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type G2DiagnosticClient interface {
+	CheckDBPerf(ctx context.Context, in *CheckDBPerfRequest, opts ...grpc.CallOption) (*CheckDBPerfResponse, error)
 	Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*Empty, error)
 }
 
@@ -31,6 +32,15 @@ type g2DiagnosticClient struct {
 
 func NewG2DiagnosticClient(cc grpc.ClientConnInterface) G2DiagnosticClient {
 	return &g2DiagnosticClient{cc}
+}
+
+func (c *g2DiagnosticClient) CheckDBPerf(ctx context.Context, in *CheckDBPerfRequest, opts ...grpc.CallOption) (*CheckDBPerfResponse, error) {
+	out := new(CheckDBPerfResponse)
+	err := c.cc.Invoke(ctx, "/g2diagnostic.G2Diagnostic/CheckDBPerf", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *g2DiagnosticClient) Init(ctx context.Context, in *InitRequest, opts ...grpc.CallOption) (*Empty, error) {
@@ -46,6 +56,7 @@ func (c *g2DiagnosticClient) Init(ctx context.Context, in *InitRequest, opts ...
 // All implementations must embed UnimplementedG2DiagnosticServer
 // for forward compatibility
 type G2DiagnosticServer interface {
+	CheckDBPerf(context.Context, *CheckDBPerfRequest) (*CheckDBPerfResponse, error)
 	Init(context.Context, *InitRequest) (*Empty, error)
 	mustEmbedUnimplementedG2DiagnosticServer()
 }
@@ -54,6 +65,9 @@ type G2DiagnosticServer interface {
 type UnimplementedG2DiagnosticServer struct {
 }
 
+func (UnimplementedG2DiagnosticServer) CheckDBPerf(context.Context, *CheckDBPerfRequest) (*CheckDBPerfResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckDBPerf not implemented")
+}
 func (UnimplementedG2DiagnosticServer) Init(context.Context, *InitRequest) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Init not implemented")
 }
@@ -68,6 +82,24 @@ type UnsafeG2DiagnosticServer interface {
 
 func RegisterG2DiagnosticServer(s grpc.ServiceRegistrar, srv G2DiagnosticServer) {
 	s.RegisterService(&G2Diagnostic_ServiceDesc, srv)
+}
+
+func _G2Diagnostic_CheckDBPerf_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckDBPerfRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(G2DiagnosticServer).CheckDBPerf(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/g2diagnostic.G2Diagnostic/CheckDBPerf",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(G2DiagnosticServer).CheckDBPerf(ctx, req.(*CheckDBPerfRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _G2Diagnostic_Init_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -96,10 +128,14 @@ var G2Diagnostic_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*G2DiagnosticServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "CheckDBPerf",
+			Handler:    _G2Diagnostic_CheckDBPerf_Handler,
+		},
+		{
 			MethodName: "Init",
 			Handler:    _G2Diagnostic_Init_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "g2diagnostic/g2diagnostic.proto",
+	Metadata: "g2diagnostic.proto",
 }

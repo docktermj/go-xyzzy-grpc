@@ -34,21 +34,27 @@ func main() {
 	log.SetFlags(log.Llongfile | log.Ldate | log.Lmicroseconds | log.LUTC)
 	logger.SetLevel(logger.LevelInfo)
 
+	// Create a context.
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
+
 	// Quick-and-dirty command line parameters. (Replace with Viper)
 
 	flag.Parse()
 
-	// Set up a connection and client to the gRPC server.
+	// Set up a connection to the gRPC server.
 
 	grpcConnection, err := grpc.Dial(*grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
+		logger.Fatalf("Did not connect: %v", err)
 	}
 	defer grpcConnection.Close()
-	g2diagnosticGrpcClient := pb.NewG2DiagnosticClient(grpcConnection)
 
-	g2diagnosticClient := g2diagnosticclient.G2diagnosticClientImpl{
-		G2DiagnosticGrpcClient: g2diagnosticGrpcClient,
+	// Set up a client to the G2diagnosis gRPC server.
+
+	g2diagnosticClient := g2diagnosticclient.G2diagnosticClient{
+		G2DiagnosticGrpcClient: pb.NewG2DiagnosticClient(grpcConnection),
 	}
 
 	// Create request parameters.
@@ -57,18 +63,23 @@ func main() {
 	verboseLogging := 0
 	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
 	if jsonErr != nil {
-		log.Fatalf("Could not build Configuration JSON: %v", jsonErr)
+		logger.Fatalf("Could not build Configuration JSON: %v", jsonErr)
 	}
-
-	// Create a context.
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
 
 	// Call.
 
 	err = g2diagnosticClient.Init(ctx, moduleName, iniParams, verboseLogging)
 	if err != nil {
-		logger.Fatalf("could not Init: %v", err)
+		logger.Fatalf("Could not Init: %v", err)
 	}
+
+	// Call.
+
+	var result string
+
+	result, err = g2diagnosticClient.CheckDBPerf(ctx, 10)
+	if err != nil {
+		logger.Fatalf("Could not CheckDBPerf: %v", err)
+	}
+	logger.Info(result)
 }

@@ -76,7 +76,6 @@ func main() {
 	// Call.
 
 	var result string
-
 	result, err = g2diagnosticClient.CheckDBPerf(ctx, 10)
 	if err != nil {
 		logger.Fatalf("Could not CheckDBPerf: %v", err)

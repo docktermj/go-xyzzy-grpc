@@ -100,6 +100,15 @@ func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *pb.C
 	return &response, err
 }
 
+func (server *G2DiagnosticServer) ClearLastException(ctx context.Context, request *pb.Empty) (*pb.Empty, error) {
+	traceEnter(5012, request)
+	g2diagnostic := getG2diagnostic()
+	err := g2diagnostic.ClearLastException(ctx)
+	response := pb.Empty{}
+	traceExit(5013, response)
+	return &response, err
+}
+
 func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.Empty, error) {
 	traceEnter(5055, request)
 	g2diagnostic := getG2diagnostic()

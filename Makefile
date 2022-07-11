@@ -188,6 +188,10 @@ build: dependencies \
 .PHONY: test
 test:
 	@go test -v $(GO_PACKAGE_NAME)/...
+	
+.PHONY: test-g2diagnostic-server
+test-g2diagnostic-server:
+	go test -v $(GO_PACKAGE_NAME)/g2diagnosticserver	
 
 # -----------------------------------------------------------------------------
 # Run

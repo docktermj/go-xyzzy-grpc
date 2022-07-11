@@ -11,9 +11,9 @@ option java_outer_classname = "HelloWorldProto";
 // The greeting service definition.
 service G2Diagnostic {
   rpc CheckDBPerf (CheckDBPerfRequest) returns (CheckDBPerfResponse) {}
+  rpc ClearLastException (Empty) returns (Empty) {}
   rpc Init (InitRequest) returns (Empty) {}
 }
-
 
 message CheckDBPerfRequest {
   int32 secondsToRun = 1;

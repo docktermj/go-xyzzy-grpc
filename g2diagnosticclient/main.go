@@ -7,15 +7,7 @@ package g2diagnosticclient
 
 import (
 	"context"
-	"flag"
-	"log"
-	"time"
-
 	pb "github.com/docktermj/go-xyzzy-grpc/g2diagnostic"
-	"github.com/docktermj/go-xyzzy-helpers/g2configuration"
-	"github.com/docktermj/go-xyzzy-helpers/logger"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 // ----------------------------------------------------------------------------
@@ -29,7 +21,7 @@ const MessageIdFormat = "senzing-6025%04d"
 // ----------------------------------------------------------------------------
 
 type G2diagnosticClientImpl struct {
-	G2DiagnosticClient G2DiagnosticClient
+	G2DiagnosticGrpcClient pb.G2DiagnosticClient
 }
 
 // ----------------------------------------------------------------------------
@@ -63,55 +55,4 @@ type G2diagnosticClient interface {
 	Init(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error
 	//	InitWithConfigID(ctx context.Context, moduleName string, iniParams string, initConfigID int64, verboseLogging int) error
 	//	Reinit(ctx context.Context, initConfigID int64) error
-}
-
-var (
-	grpcAddress = flag.String("addr", "localhost:50051", "the address to connect to")
-)
-
-func main() {
-
-	// Configure the "log" standard library.
-
-	log.SetFlags(log.Llongfile | log.Ldate | log.Lmicroseconds | log.LUTC)
-	logger.SetLevel(logger.LevelInfo)
-
-	// Quick-and-dirty command line parameters. (Replace with Viper)
-
-	flag.Parse()
-
-	// Set up a connection and client to the gRPC server.
-
-	grpcConnection, err := grpc.Dial(*grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("Did not connect: %v", err)
-	}
-	defer grpcConnection.Close()
-	g2diagnosticClient := pb.NewG2DiagnosticClient(grpcConnection)
-
-	// Create a context.
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	// Create request parameters.
-
-	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
-	if jsonErr != nil {
-		log.Fatalf("Could not build Configuration JSON: %v", jsonErr)
-	}
-
-	initRequest := pb.InitRequest{
-		ModuleName:     "Test module name",
-		IniParams:      iniParams,
-		VerboseLogging: int32(0), // 0 for no Senzing logging; 1 for logging
-	}
-
-	// Contact the server and print out its response.
-
-	result, err := g2diagnosticClient.Init(ctx, &initRequest)
-	if err != nil {
-		logger.Fatalf("could not Init: %v", err)
-	}
-	logger.Infof("Result: %v", result)
 }

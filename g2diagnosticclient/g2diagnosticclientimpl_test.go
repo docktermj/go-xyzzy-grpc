@@ -1,4 +1,4 @@
-package g2diagnostic
+package g2diagnosticclient
 
 import (
 	"context"

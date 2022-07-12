@@ -304,6 +304,39 @@ func (server *G2DiagnosticServer) GetPhysicalCores(ctx context.Context, request 
 	return &response, err
 }
 
+func (server *G2DiagnosticServer) GetRelationshipDetails(ctx context.Context, request *pb.GetRelationshipDetailsRequest) (*pb.GetRelationshipDetailsResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetRelationshipDetails(ctx, request.RelationshipID, int(request.IncludeInternalFeatures))
+	response := pb.GetRelationshipDetailsResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetResolutionStatistics(ctx context.Context, request *pb.GetResolutionStatisticsRequest) (*pb.GetResolutionStatisticsResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetResolutionStatistics(ctx)
+	response := pb.GetResolutionStatisticsResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetTotalSystemMemory(ctx context.Context, request *pb.GetTotalSystemMemoryRequest) (*pb.GetTotalSystemMemoryResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetTotalSystemMemory(ctx)
+	response := pb.GetTotalSystemMemoryResponse{
+		Result: int64(result),
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
 func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
 	traceEnter(5198, request)
 	g2diagnostic := getG2diagnostic()

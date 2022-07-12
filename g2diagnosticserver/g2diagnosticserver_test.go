@@ -251,3 +251,50 @@ func TestGetPhysicalCores(test *testing.T) {
 	testError(test, ctx, err)
 	test.Log("Actual:", actual)
 }
+
+func TestGetRelationshipDetails(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetRelationshipDetailsRequest{
+		RelationshipID:          int64(1),
+		IncludeInternalFeatures: 1,
+	}
+	actual, err := g2diagnosticServer.GetRelationshipDetails(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetResolutionStatistics(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetResolutionStatisticsRequest{}
+	actual, err := g2diagnosticServer.GetResolutionStatistics(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetTotalSystemMemory(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetTotalSystemMemoryRequest{}
+	actual, err := g2diagnosticServer.GetTotalSystemMemory(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestInit(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
+	if jsonErr != nil {
+		assert.FailNow(test, jsonErr.Error())
+	}
+	request := pb.InitRequest{
+		ModuleName:     "Test module name",
+		IniParams:      iniParams,
+		VerboseLogging: int32(0),
+	}
+	actual, err := g2diagnosticServer.Init(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}

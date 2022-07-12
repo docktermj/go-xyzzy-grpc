@@ -3,6 +3,7 @@ package g2diagnosticserver
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"runtime"
 	"strconv"
 
@@ -165,6 +166,72 @@ func (server *G2DiagnosticServer) GetDataSourceCounts(ctx context.Context, reque
 	g2diagnostic := getG2diagnostic()
 	result, err := g2diagnostic.GetDataSourceCounts(ctx)
 	response := pb.GetDataSourceCountsResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetDBInfo(ctx context.Context, request *pb.GetDBInfoRequest) (*pb.GetDBInfoResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetDBInfo(ctx)
+	response := pb.GetDBInfoResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetEntityDetails(ctx context.Context, request *pb.GetEntityDetailsRequest) (*pb.GetEntityDetailsResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetEntityDetails(ctx, request.EntityID, int(request.IncludeInternalFeatures))
+	response := pb.GetEntityDetailsResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetEntityListBySize(ctx context.Context, request *pb.GetEntityListBySizeRequest) (*pb.GetEntityListBySizeResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetEntityListBySize(ctx, int(request.EntitySize))
+	response := pb.GetEntityListBySizeResponse{
+		Result: fmt.Sprintf("%v", result),
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetEntityResume(ctx context.Context, request *pb.GetEntityResumeRequest) (*pb.GetEntityResumeResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetEntityResume(ctx, request.EntityID)
+	response := pb.GetEntityResumeResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetEntitySizeBreakdown(ctx context.Context, request *pb.GetEntitySizeBreakdownRequest) (*pb.GetEntitySizeBreakdownResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetEntitySizeBreakdown(ctx, int(request.MinimumEntitySize), int(request.IncludeInternalFeatures))
+	response := pb.GetEntitySizeBreakdownResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetFeature(ctx context.Context, request *pb.GetFeatureRequest) (*pb.GetFeatureResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetFeature(ctx, request.LibFeatID)
+	response := pb.GetFeatureResponse{
 		Result: result,
 	}
 	traceExit(5199, response)

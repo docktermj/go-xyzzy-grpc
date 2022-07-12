@@ -83,40 +83,37 @@ func TestDestroy(test *testing.T) {
 	test.Log("Actual:", actual)
 }
 
-func TestEntityListBySize(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnosticServer, _ := getTestObject(ctx)
-
-	entitySize := int32(10)
-	request := pb.GetEntityListBySizeRequest{
-		EntitySize: entitySize,
-	}
-	actual, err := g2diagnosticServer.GetEntityListBySize(ctx, &request)
-	testError(test, ctx, err)
-	test.Log("Actual:", actual)
-
-	entityListBySizeHandle := actual.Result
-	request2 := pb.FetchNextEntityBySizeRequest{
-		EntityListBySizeHandle: entityListBySizeHandle,
-	}
-	actual2, err2 := g2diagnosticServer.FetchNextEntityBySize(ctx, &request2)
-	testError(test, ctx, err2)
-	test.Log("Actual:", actual2)
-
-	request3 := pb.CloseEntityListBySizeRequest{
-		EntityListBySizeHandle: entityListBySizeHandle,
-	}
-	actual3, err3 := g2diagnosticServer.CloseEntityListBySize(ctx, &request3)
-	testError(test, ctx, err3)
-	test.Log("Actual:", actual3)
-}
+//func TestEntityListBySize(test *testing.T) {
+//	ctx := context.TODO()
+//	g2diagnosticServer, _ := getTestObject(ctx)
+//	request := pb.GetEntityListBySizeRequest{
+//		EntitySize: int32(10),
+//	}
+//	actual, err := g2diagnosticServer.GetEntityListBySize(ctx, &request)
+//	testError(test, ctx, err)
+//	test.Log("Actual:", actual)
+//
+//	entityListBySizeHandle := actual.Result
+//	request2 := pb.FetchNextEntityBySizeRequest{
+//		EntityListBySizeHandle: entityListBySizeHandle,
+//	}
+//	actual2, err2 := g2diagnosticServer.FetchNextEntityBySize(ctx, &request2)
+//	testError(test, ctx, err2)
+//	test.Log("Actual:", actual2)
+//
+//	request3 := pb.CloseEntityListBySizeRequest{
+//		EntityListBySizeHandle: entityListBySizeHandle,
+//	}
+//	actual3, err3 := g2diagnosticServer.CloseEntityListBySize(ctx, &request3)
+//	testError(test, ctx, err3)
+//	test.Log("Actual:", actual3)
+//}
 
 func TestFindEntitiesByFeatureIDs(test *testing.T) {
 	ctx := context.TODO()
 	g2diagnosticServer, _ := getTestObject(ctx)
-	features := "{\"ENTITY_ID\":1,\"LIB_FEAT_IDS\":[1,3,4]}"
 	request := pb.FindEntitiesByFeatureIDsRequest{
-		Features: features,
+		Features: "{\"ENTITY_ID\":1,\"LIB_FEAT_IDS\":[1,3,4]}",
 	}
 	actual, err := g2diagnosticServer.FindEntitiesByFeatureIDs(ctx, &request)
 	testError(test, ctx, err)
@@ -137,6 +134,61 @@ func TestGetDataSourceCounts(test *testing.T) {
 	g2diagnosticServer, _ := getTestObject(ctx)
 	request := pb.GetDataSourceCountsRequest{}
 	actual, err := g2diagnosticServer.GetDataSourceCounts(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetDBInfo(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetDBInfoRequest{}
+	actual, err := g2diagnosticServer.GetDBInfo(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetEntityDetails(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetEntityDetailsRequest{
+		EntityID:                int64(1),
+		IncludeInternalFeatures: 1,
+	}
+	actual, err := g2diagnosticServer.GetEntityDetails(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetEntityResume(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetEntityResumeRequest{
+		EntityID: int64(1),
+	}
+	actual, err := g2diagnosticServer.GetEntityResume(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetEntitySizeBreakdown(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetEntitySizeBreakdownRequest{
+		MinimumEntitySize:       int32(1),
+		IncludeInternalFeatures: int32(1),
+	}
+	actual, err := g2diagnosticServer.GetEntitySizeBreakdown(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetFeature(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetFeatureRequest{
+		LibFeatID: int64(1),
+	}
+	actual, err := g2diagnosticServer.GetFeature(ctx, &request)
 	testError(test, ctx, err)
 	test.Log("Actual:", actual)
 }

@@ -298,3 +298,32 @@ func TestInit(test *testing.T) {
 	testError(test, ctx, err)
 	test.Log("Actual:", actual)
 }
+
+func TestInitWithConfigID(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
+	if jsonErr != nil {
+		assert.FailNow(test, jsonErr.Error())
+	}
+	request := pb.InitWithConfigIDRequest{
+		ModuleName:     "Test module name",
+		IniParams:      iniParams,
+		InitConfigID:   int64(1),
+		VerboseLogging: int32(0),
+	}
+	actual, err := g2diagnosticServer.InitWithConfigID(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestReinit(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.ReinitRequest{
+		InitConfigID: int64(1),
+	}
+	actual, err := g2diagnosticServer.Reinit(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}

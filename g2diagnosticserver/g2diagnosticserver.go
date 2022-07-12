@@ -345,3 +345,21 @@ func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequ
 	traceExit(5156, response)
 	return &response, err
 }
+
+func (server *G2DiagnosticServer) InitWithConfigID(ctx context.Context, request *pb.InitWithConfigIDRequest) (*pb.InitWithConfigIDResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	err := g2diagnostic.InitWithConfigID(ctx, request.ModuleName, request.IniParams, int64(request.InitConfigID), int(request.VerboseLogging))
+	response := pb.InitWithConfigIDResponse{}
+	traceExit(5156, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) Reinit(ctx context.Context, request *pb.ReinitRequest) (*pb.ReinitResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	err := g2diagnostic.Reinit(ctx, int64(request.InitConfigID))
+	response := pb.ReinitResponse{}
+	traceExit(5156, response)
+	return &response, err
+}

@@ -238,6 +238,72 @@ func (server *G2DiagnosticServer) GetFeature(ctx context.Context, request *pb.Ge
 	return &response, err
 }
 
+func (server *G2DiagnosticServer) GetGenericFeatures(ctx context.Context, request *pb.GetGenericFeaturesRequest) (*pb.GetGenericFeaturesResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetGenericFeatures(ctx, request.FeatureType, int(request.MaximumEstimatedCount))
+	response := pb.GetGenericFeaturesResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetLastException(ctx context.Context, request *pb.GetLastExceptionRequest) (*pb.GetLastExceptionResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetLastException(ctx)
+	response := pb.GetLastExceptionResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetLastExceptionCode(ctx context.Context, request *pb.GetLastExceptionCodeRequest) (*pb.GetLastExceptionCodeResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetLastExceptionCode(ctx)
+	response := pb.GetLastExceptionCodeResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetLogicalCores(ctx context.Context, request *pb.GetLogicalCoresRequest) (*pb.GetLogicalCoresResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetLogicalCores(ctx)
+	response := pb.GetLogicalCoresResponse{
+		Result: int32(result),
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetMappingStatistics(ctx context.Context, request *pb.GetMappingStatisticsRequest) (*pb.GetMappingStatisticsResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetMappingStatistics(ctx, int(request.IncludeInternalFeatures))
+	response := pb.GetMappingStatisticsResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetPhysicalCores(ctx context.Context, request *pb.GetPhysicalCoresRequest) (*pb.GetPhysicalCoresResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetPhysicalCores(ctx)
+	response := pb.GetPhysicalCoresResponse{
+		Result: int32(result),
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
 func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
 	traceEnter(5198, request)
 	g2diagnostic := getG2diagnostic()

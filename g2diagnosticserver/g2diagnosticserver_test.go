@@ -192,3 +192,62 @@ func TestGetFeature(test *testing.T) {
 	testError(test, ctx, err)
 	test.Log("Actual:", actual)
 }
+
+func TestGetGenericFeatures(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetGenericFeaturesRequest{
+		FeatureType:           "PHONE",
+		MaximumEstimatedCount: 10,
+	}
+	actual, err := g2diagnosticServer.GetGenericFeatures(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetLastException(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetLastExceptionRequest{}
+	actual, err := g2diagnosticServer.GetLastException(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetLastExceptionCode(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetLastExceptionCodeRequest{}
+	actual, err := g2diagnosticServer.GetLastExceptionCode(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetLogicalCores(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetLogicalCoresRequest{}
+	actual, err := g2diagnosticServer.GetLogicalCores(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetMappingStatistics(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetMappingStatisticsRequest{
+		IncludeInternalFeatures: 1,
+	}
+	actual, err := g2diagnosticServer.GetMappingStatistics(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}
+
+func TestGetPhysicalCores(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnosticServer, _ := getTestObject(ctx)
+	request := pb.GetPhysicalCoresRequest{}
+	actual, err := g2diagnosticServer.GetPhysicalCores(ctx, &request)
+	testError(test, ctx, err)
+	test.Log("Actual:", actual)
+}

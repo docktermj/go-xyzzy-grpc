@@ -90,30 +90,92 @@ func traceExit(messageNumber int, response interface{}) {
 // ----------------------------------------------------------------------------
 
 func (server *G2DiagnosticServer) CheckDBPerf(ctx context.Context, request *pb.CheckDBPerfRequest) (*pb.CheckDBPerfResponse, error) {
-	traceEnter(5010, request)
+	traceEnter(5100, request)
 	g2diagnostic := getG2diagnostic()
 	result, err := g2diagnostic.CheckDBPerf(ctx, int(request.SecondsToRun))
 	response := pb.CheckDBPerfResponse{
 		Result: result,
 	}
-	traceExit(5011, response)
+	traceExit(5101, response)
 	return &response, err
 }
 
-func (server *G2DiagnosticServer) ClearLastException(ctx context.Context, request *pb.Empty) (*pb.Empty, error) {
-	traceEnter(5012, request)
+func (server *G2DiagnosticServer) ClearLastException(ctx context.Context, request *pb.ClearLastExceptionRequest) (*pb.ClearLastExceptionResponse, error) {
+	traceEnter(5102, request)
 	g2diagnostic := getG2diagnostic()
 	err := g2diagnostic.ClearLastException(ctx)
-	response := pb.Empty{}
-	traceExit(5013, response)
+	response := pb.ClearLastExceptionResponse{}
+	traceExit(5103, response)
 	return &response, err
 }
 
-func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.Empty, error) {
-	traceEnter(5055, request)
+func (server *G2DiagnosticServer) CloseEntityListBySize(ctx context.Context, request *pb.CloseEntityListBySizeRequest) (*pb.CloseEntityListBySizeResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	err := g2diagnostic.CloseEntityListBySize(ctx, request.EntityListBySizeHandle)
+	response := pb.CloseEntityListBySizeResponse{}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) Destroy(ctx context.Context, request *pb.DestroyRequest) (*pb.DestroyResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	err := g2diagnostic.Destroy(ctx)
+	response := pb.DestroyResponse{}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) FetchNextEntityBySize(ctx context.Context, request *pb.FetchNextEntityBySizeRequest) (*pb.FetchNextEntityBySizeResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.FetchNextEntityBySize(ctx, request.EntityListBySizeHandle)
+	response := pb.FetchNextEntityBySizeResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) FindEntitiesByFeatureIDs(ctx context.Context, request *pb.FindEntitiesByFeatureIDsRequest) (*pb.FindEntitiesByFeatureIDsResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.FindEntitiesByFeatureIDs(ctx, request.Features)
+	response := pb.FindEntitiesByFeatureIDsResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetAvailableMemory(ctx context.Context, request *pb.GetAvailableMemoryRequest) (*pb.GetAvailableMemoryResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetAvailableMemory(ctx)
+	response := pb.GetAvailableMemoryResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) GetDataSourceCounts(ctx context.Context, request *pb.GetDataSourceCountsRequest) (*pb.GetDataSourceCountsResponse, error) {
+	traceEnter(5198, request)
+	g2diagnostic := getG2diagnostic()
+	result, err := g2diagnostic.GetDataSourceCounts(ctx)
+	response := pb.GetDataSourceCountsResponse{
+		Result: result,
+	}
+	traceExit(5199, response)
+	return &response, err
+}
+
+func (server *G2DiagnosticServer) Init(ctx context.Context, request *pb.InitRequest) (*pb.InitResponse, error) {
+	traceEnter(5198, request)
 	g2diagnostic := getG2diagnostic()
 	err := g2diagnostic.Init(ctx, request.ModuleName, request.IniParams, int(request.VerboseLogging))
-	response := pb.Empty{}
-	traceExit(5056, response)
+	response := pb.InitResponse{}
+	traceExit(5156, response)
 	return &response, err
 }

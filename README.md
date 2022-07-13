@@ -5,6 +5,8 @@
 
 ### Testing
 
+#### Testable stack
+
 1. Build Senzing installer.
    This is used to install the Senzing binaries.
    Example:
@@ -80,6 +82,8 @@
     cd ${DOCKER_COMPOSE_DIR}
     sudo --preserve-env docker-compose up
     ```
+
+#### gRPC server
 
 1. Identify git repository.
 

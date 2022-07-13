@@ -48,14 +48,14 @@
    Example:
 
     ```console
-    export DOCKER_COMPOSE_VAR=~/my-senzing-grpc-stack
+    export DOCKER_COMPOSE_DIR=~/my-senzing-grpc-stack
     export SENZING_DOCKER_COMPOSE_YAML=postgresql/docker-compose-rabbitmq-postgresql.yaml
 
-    rm -rf ${DOCKER_COMPOSE_VAR:-/tmp/nowhere/for/safety}
-    mkdir -p ${DOCKER_COMPOSE_VAR}
+    rm -rf ${DOCKER_COMPOSE_DIR:-/tmp/nowhere/for/safety}
+    mkdir -p ${DOCKER_COMPOSE_DIR}
 
     curl -X GET \
-        --output ${DOCKER_COMPOSE_VAR}/docker-compose.yaml \
+        --output ${DOCKER_COMPOSE_DIR}/docker-compose.yaml \
         "https://raw.githubusercontent.com/Senzing/docker-compose-demo/main/resources/${SENZING_DOCKER_COMPOSE_YAML}"
 
     curl -X GET \
@@ -68,18 +68,18 @@
     export SENZING_G2_DIR=/opt/senzing/g2
     export SENZING_VAR_DIR=/var/opt/senzing
 
-    export PGADMIN_DIR=${DOCKER_COMPOSE_VAR}/pgadmin
-    export POSTGRES_DIR=${DOCKER_COMPOSE_VAR}/postgres
-    export RABBITMQ_DIR=${DOCKER_COMPOSE_VAR}/rabbitmq
+    export PGADMIN_DIR=${DOCKER_COMPOSE_DIR}/pgadmin
+    export POSTGRES_DIR=${DOCKER_COMPOSE_DIR}/postgres
+    export RABBITMQ_DIR=${DOCKER_COMPOSE_DIR}/rabbitmq
 
     sudo mkdir -p ${PGADMIN_DIR}
     sudo mkdir -p ${POSTGRES_DIR}
     sudo mkdir -p ${RABBITMQ_DIR}
-    sudo chown $(id -u):$(id -g) -R ${DOCKER_COMPOSE_VAR}
-    sudo chmod -R 770 ${DOCKER_COMPOSE_VAR}
+    sudo chown $(id -u):$(id -g) -R ${DOCKER_COMPOSE_DIR}
+    sudo chmod -R 770 ${DOCKER_COMPOSE_DIR}
     sudo chmod -R 777 ${PGADMIN_DIR}
 
-    cd ${DOCKER_COMPOSE_VAR}
+    cd ${DOCKER_COMPOSE_DIR}
     sudo --preserve-env docker-compose up
     ```
 

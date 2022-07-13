@@ -102,9 +102,11 @@
     export SENZING_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
     ```
 
-1. Run tests.
+1. Run gRPC server tests.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make --environment-overrides test
+    make \
+      --environment-overrides \
+      test-g2diagnostic-server
     ```

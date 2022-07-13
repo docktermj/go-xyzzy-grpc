@@ -6,6 +6,8 @@
 ### Testing
 
 1. Build Senzing installer.
+   This is used to install the Senzing binaries.
+   Example:
 
     ```console
     curl -X GET \
@@ -23,6 +25,8 @@
     ```
 
 1. Install Senzing.
+   This installs Senzing into the "system" locations (e.g. `/opt/senzing`).
+   Example:
 
    ```console
     curl -X GET \
@@ -41,9 +45,10 @@
    ```
 
 1. Bring up Senzing stack:
+   Example:
 
     ```console
-    export DOCKER_COMPOSE_VAR=~/docker-compose-var
+    export DOCKER_COMPOSE_VAR=~/my-senzing-grpc-stack
     export SENZING_DOCKER_COMPOSE_YAML=postgresql/docker-compose-rabbitmq-postgresql.yaml
 
     rm -rf ${DOCKER_COMPOSE_VAR:-/tmp/nowhere/for/safety}

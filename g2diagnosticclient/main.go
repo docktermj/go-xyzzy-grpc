@@ -27,7 +27,7 @@ type G2diagnosticClient struct {
 // Interfaces
 // ----------------------------------------------------------------------------
 
-//type G2diagnosticClient interface {
+//type G2GiagnosticClient interface {
 //	CheckDBPerf(ctx context.Context, secondsToRun int) (string, error)
 //	ClearLastException(ctx context.Context) error
 //	CloseEntityListBySize(ctx context.Context, entityListBySizeHandle interface{}) error

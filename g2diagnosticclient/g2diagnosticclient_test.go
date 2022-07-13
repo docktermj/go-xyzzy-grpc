@@ -11,7 +11,7 @@ import (
 
 var (
 	grpcConnection     *grpc.ClientConn
-	g2diagnosticClient pb.G2diagnosticClient
+	g2diagnosticClient pb.G2DiagnosticGrpcClient
 )
 
 // ----------------------------------------------------------------------------

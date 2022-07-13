@@ -261,16 +261,18 @@ func (client *G2diagnosticClient) ClearLastException(ctx context.Context) error 
 //	return int64(result), err
 //}
 //
-//// Init initializes the Senzing G2diagnosis.
-//func (client *G2diagnosticClient) Init(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
-//	request := pb.InitRequest{
-//		ModuleName:     moduleName,
-//		IniParams:      iniParams,
-//		VerboseLogging: int32(verboseLogging),
-//	}
-//	_, err := client.G2DiagnosticGrpcClient.Init(ctx, &request)
-//	return err
-//}
+
+// Init initializes the Senzing G2diagnosis.
+func (client *G2diagnosticClient) Init(ctx context.Context, moduleName string, iniParams string, verboseLogging int) error {
+	request := pb.InitRequest{
+		ModuleName:     moduleName,
+		IniParams:      iniParams,
+		VerboseLogging: int32(verboseLogging),
+	}
+	_, err := client.G2DiagnosticGrpcClient.Init(ctx, &request)
+	return err
+}
+
 //
 //// TODO: Document.
 //func (client *G2diagnosticClient) InitWithConfigID(ctx context.Context, moduleName string, iniParams string, initConfigID int64, verboseLogging int) error {

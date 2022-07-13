@@ -2,10 +2,16 @@ package g2diagnosticclient
 
 import (
 	"context"
-	"testing"
-
+	pb "github.com/docktermj/go-xyzzy-grpc/g2diagnostic"
 	"github.com/docktermj/go-xyzzy-helpers/g2configuration"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc"
+	"testing"
+)
+
+var (
+	grpcConnection     *grpc.ClientConn
+	g2diagnosticClient pb.G2diagnosticClient
 )
 
 // ----------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 # xyzzy-grpc
 
-
 ## Development
 
 ### Testing
@@ -35,10 +34,8 @@
         --output /tmp/senzing-versions-latest.sh \
         https://raw.githubusercontent.com/Senzing/knowledge-base/main/lists/senzing-versions-latest.sh
     source /tmp/senzing-versions-latest.sh
-
     sudo rm -rf /opt/senzing
     sudo mkdir -p /opt/senzing
-
     sudo docker run \
         --rm \
         --user 0 \
@@ -83,7 +80,7 @@
     sudo --preserve-env docker-compose up
     ```
 
-#### gRPC server
+#### Test gRPC server
 
 1. Identify git repository.
 
@@ -113,4 +110,33 @@
     make \
       --environment-overrides \
       test-g2diagnostic-server
+    ```
+
+#### Run gRPC server
+
+1. Identify git repository.
+
+    ```console
+    export GIT_ACCOUNT=docktermj
+    export GIT_REPOSITORY=go-xyzzy-grpc
+    export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
+    export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
+    ```
+
+1. :pencil2: Set environment variables.
+   Identify Database URL of database in docker-compose stack.
+   Example:
+
+    ```console
+    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+    export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
+    ```
+
+1. Run gRPC server tests.
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make \
+      --environment-overrides \
+      run-g2diagnostic-server
     ```

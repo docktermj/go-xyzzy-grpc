@@ -103,7 +103,7 @@
     export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
     ```
 
-1. Run gRPC server tests.
+1. Run gRPC server unit server tests.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
@@ -112,18 +112,7 @@
       test-g2diagnostic-server
     ```
 
-#### Run gRPC server
-
-1. Identify git repository.
-
-    ```console
-    export GIT_ACCOUNT=docktermj
-    export GIT_REPOSITORY=go-xyzzy-grpc
-    export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
-    export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
-    ```
-
-1. Run gRPC server tests.
+1. Run gRPC server.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
@@ -152,7 +141,16 @@
     export SENZING_TOOLS_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
     ```
 
-1. Run gRPC server tests.
+1. Run gRPC client unit tests.
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make \
+      --environment-overrides \
+      test-g2diagnostic-client
+    ```
+
+1. Run gRPC client.
 
     ```console
     cd ${GIT_REPOSITORY_DIR}

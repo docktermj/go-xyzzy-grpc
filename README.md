@@ -147,7 +147,7 @@
     cd ${GIT_REPOSITORY_DIR}
     make \
       --environment-overrides \
-      run-g2diagnostic-client
+      test-g2diagnostic-client
     ```
 
 1. Run gRPC client.
@@ -156,5 +156,5 @@
     cd ${GIT_REPOSITORY_DIR}
     make \
       --environment-overrides \
-      test-g2diagnostic-client
+      run-g2diagnostic-client
     ```

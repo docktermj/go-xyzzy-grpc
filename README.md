@@ -49,14 +49,14 @@
 
     ```console
     export DOCKER_COMPOSE_DIR=~/my-senzing-grpc-stack
-    export SENZING_DOCKER_COMPOSE_YAML=postgresql/docker-compose-rabbitmq-postgresql.yaml
+    export DOCKER_COMPOSE_YAML=postgresql/docker-compose-rabbitmq-postgresql.yaml
 
     rm -rf ${DOCKER_COMPOSE_DIR:-/tmp/nowhere/for/safety}
     mkdir -p ${DOCKER_COMPOSE_DIR}
 
     curl -X GET \
         --output ${DOCKER_COMPOSE_DIR}/docker-compose.yaml \
-        "https://raw.githubusercontent.com/Senzing/docker-compose-demo/main/resources/${SENZING_DOCKER_COMPOSE_YAML}"
+        "https://raw.githubusercontent.com/Senzing/docker-compose-demo/main/resources/${DOCKER_COMPOSE_YAML}"
 
     curl -X GET \
         --output /tmp/docker-versions-latest.sh \

@@ -191,8 +191,8 @@ test:
 
 
 .PHONY: test-g2diagnostic-client
-test-g2diagnostic-server:
-	go test -v $(GO_PACKAGE_NAME)/g2diagnosticserver
+test-g2diagnostic-client:
+	go test -v $(GO_PACKAGE_NAME)/g2diagnosticclient
 
 
 .PHONY: test-g2diagnostic-server

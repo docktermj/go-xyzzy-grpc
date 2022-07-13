@@ -98,7 +98,8 @@
    Example:
 
     ```console
-    export SENZING_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/G2
+    export LOCAL_IP_ADDRESS=$(curl --silent https://raw.githubusercontent.com/Senzing/knowledge-base/main/gists/find-local-ip-address/find-local-ip-address.py | python3 -)
+    export SENZING_DATABASE_URL=postgresql://postgres:postgres@${LOCAL_IP_ADDRESS}:5432/G2
     ```
 
 1. Run tests.

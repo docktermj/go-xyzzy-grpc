@@ -177,20 +177,15 @@ func (client *G2diagnosticClient) ClearLastException(ctx context.Context) error 
 //	}
 //	return stringBuffer, err
 //}
-//
-//// GetLastException returns the last exception encountered in the Senzing Engine.
-//func (client *G2diagnosticClient) GetLastException(ctx context.Context) (string, error) {
-//	//  _DLEXPORT int G2Diagnostic_getLastException(char *buffer, const size_t bufSize);
-//	var err error = nil
-//	stringBuffer := g2diagnostic.getByteArray(initialByteArraySize)
-//	C.G2Diagnostic_getLastException((*C.char)(unsafe.Pointer(&stringBuffer[0])), C.ulong(len(stringBuffer)))
-//	stringBuffer = bytes.Trim(stringBuffer, "\x00")
-//	if len(stringBuffer) == 0 {
-//		err = logger.BuildError(MessageIdFormat, 2999, "Cannot retrieve last error message.")
-//	}
-//	return string(stringBuffer), err
-//}
-//
+
+// GetLastException returns the last exception encountered in the Senzing Engine.
+func (client *G2diagnosticClient) GetLastException(ctx context.Context) (string, error) {
+	request := pb.GetLastExceptionRequest{}
+	response, err := client.G2DiagnosticGrpcClient.GetLastException(ctx, &request)
+	result := response.GetResult()
+	return result, err
+}
+
 //// TODO: Document.
 //func (client *G2diagnosticClient) GetLastExceptionCode(ctx context.Context) (string, error) {
 //	//  _DLEXPORT int G2Diagnostic_getLastException(char *buffer, const size_t bufSize);

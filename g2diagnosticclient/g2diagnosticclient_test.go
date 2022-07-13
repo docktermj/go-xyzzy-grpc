@@ -2,38 +2,69 @@ package g2diagnosticclient
 
 import (
 	"context"
+	"fmt"
 	pb "github.com/docktermj/go-xyzzy-grpc/g2diagnostic"
 	"github.com/docktermj/go-xyzzy-helpers/g2configuration"
+	"github.com/docktermj/go-xyzzy-helpers/logger"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"testing"
 )
 
 var (
+	grpcAddress        = "localhost:50051"
 	grpcConnection     *grpc.ClientConn
-	g2diagnosticClient pb.G2DiagnosticGrpcClient
+	g2diagnosticClient G2diagnosticClient
 )
 
 // ----------------------------------------------------------------------------
 // Internal functions - names begin with lowercase letter
 // ----------------------------------------------------------------------------
 
-func getTestObject(ctx context.Context) (G2diagnostic, error) {
-	var err error = nil
-	g2diagnostic := G2diagnosticImpl{}
+func getGrpcConnection() *grpc.ClientConn {
+	if grpcConnection == nil {
+		fmt.Println(">>>>>>>>>>>>>>> Getting connection")
+		grpcConnection, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			logger.Fatalf("Did not connect: %v", err)
+		}
+		defer grpcConnection.Close()
+	}
+	return grpcConnection
+}
+
+func getG2diagnosticClient() G2diagnosticClient {
+	if g2diagnosticClient == (G2diagnosticClient{}) {
+		fmt.Println(">>>>>>>>>>>>>>> Getting G2diagnosticClient")
+
+		grpcConnection := getGrpcConnection()
+		g2diagnosticClient = G2diagnosticClient{
+			G2DiagnosticGrpcClient: pb.NewG2DiagnosticClient(grpcConnection),
+		}
+	}
+	return g2diagnosticClient
+}
+
+func getTestObject(ctx context.Context) G2diagnosticClient {
+	g2diagnosticClient := getG2diagnosticClient()
 
 	moduleName := "Test module name"
 	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
 	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
 	if jsonErr != nil {
-		return &g2diagnostic, jsonErr
+		logger.Fatalf("Cannot construct system configuration: %v", jsonErr)
 	}
 
-	err = g2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
-	return &g2diagnostic, err
+	initErr := g2diagnosticClient.Init(ctx, moduleName, iniParams, verboseLogging)
+	if initErr != nil {
+		logger.Fatalf("Cannot Init: %v", initErr)
+	}
+
+	return g2diagnosticClient
 }
 
-func testError(test *testing.T, ctx context.Context, g2diagnostic G2diagnostic, err error) {
+func testError(test *testing.T, ctx context.Context, g2diagnostic G2diagnosticClient, err error) {
 	if err != nil {
 		test.Log("Error:", err.Error())
 		lastException, _ := g2diagnostic.GetLastException(ctx)
@@ -57,8 +88,7 @@ func setupSuite(test testing.TB) func(test testing.TB) {
 
 func TestGetObject(test *testing.T) {
 	ctx := context.TODO()
-	g2engine, err := getTestObject(ctx)
-	testError(test, ctx, g2engine, err)
+	getTestObject(ctx)
 }
 
 // ----------------------------------------------------------------------------
@@ -67,7 +97,7 @@ func TestGetObject(test *testing.T) {
 
 func TestInit(test *testing.T) {
 	ctx := context.TODO()
-	g2diagnostic := &G2diagnosticClientImpl{}
+	g2diagnostic := getTestObject(ctx)
 	moduleName := "Test module name"
 	verboseLogging := 0
 	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")

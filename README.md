@@ -85,7 +85,7 @@
 
     ```console
     export GIT_ACCOUNT=docktermj
-    export GIT_REPOSITORY=g2-sdk-go
+    export GIT_REPOSITORY=go-xyzzy-grpc
     export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
     export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
     ```
@@ -106,5 +106,5 @@
 
     ```console
     cd ${GIT_REPOSITORY_DIR}
-    make -e test
+    make --environment-overrides test
     ```

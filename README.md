@@ -72,9 +72,7 @@
     export POSTGRES_DIR=${DOCKER_COMPOSE_DIR}/postgres
     export RABBITMQ_DIR=${DOCKER_COMPOSE_DIR}/rabbitmq
 
-    sudo mkdir -p ${PGADMIN_DIR}
-    sudo mkdir -p ${POSTGRES_DIR}
-    sudo mkdir -p ${RABBITMQ_DIR}
+    sudo mkdir -p ${PGADMIN_DIR} ${POSTGRES_DIR} ${RABBITMQ_DIR}
     sudo chown $(id -u):$(id -g) -R ${DOCKER_COMPOSE_DIR}
     sudo chmod -R 770 ${DOCKER_COMPOSE_DIR}
     sudo chmod -R 777 ${PGADMIN_DIR}

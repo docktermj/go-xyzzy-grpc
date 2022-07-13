@@ -140,3 +140,23 @@
       --environment-overrides \
       run-g2diagnostic-server
     ```
+
+#### Test gRPC client
+
+1. Identify git repository.
+
+    ```console
+    export GIT_ACCOUNT=docktermj
+    export GIT_REPOSITORY=go-xyzzy-grpc
+    export GIT_ACCOUNT_DIR=~/${GIT_ACCOUNT}.git
+    export GIT_REPOSITORY_DIR="${GIT_ACCOUNT_DIR}/${GIT_REPOSITORY}"
+    ```
+
+1. Run gRPC server tests.
+
+    ```console
+    cd ${GIT_REPOSITORY_DIR}
+    make \
+      --environment-overrides \
+      test-g2diagnostic-client
+    ```

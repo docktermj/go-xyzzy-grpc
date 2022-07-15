@@ -3,6 +3,7 @@ package g2diagnosticclient
 import (
 	"context"
 	"fmt"
+	g2d "github.com/docktermj/g2-sdk-go/g2diagnostic"
 	pb "github.com/docktermj/go-xyzzy-grpc/g2diagnostic"
 	"github.com/docktermj/go-xyzzy-helpers/g2configuration"
 	"github.com/docktermj/go-xyzzy-helpers/logger"
@@ -13,9 +14,9 @@ import (
 )
 
 var (
-	grpcAddress        = "localhost:50051"
-	grpcConnection     *grpc.ClientConn
-	g2diagnosticClient G2diagnosticClient
+	grpcAddress    = "localhost:50051"
+	grpcConnection *grpc.ClientConn
+	g2diagnostic   g2d.G2diagnostic
 )
 
 // ----------------------------------------------------------------------------
@@ -23,48 +24,54 @@ var (
 // ----------------------------------------------------------------------------
 
 func getGrpcConnection() *grpc.ClientConn {
+	var err error
 	if grpcConnection == nil {
 		fmt.Println(">>>>>>>>>>>>>>> Getting connection")
-		grpcConnection, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		grpcConnection, err = grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			logger.Fatalf("Did not connect: %v", err)
 		}
-		defer grpcConnection.Close()
+		//		defer grpcConnection.Close()
 	}
 	return grpcConnection
 }
 
-func getG2diagnosticClient() G2diagnosticClient {
-	if g2diagnosticClient == (G2diagnosticClient{}) {
+//func getG2diagnosticClient() G2diagnosticClient {
+//	if g2diagnosticClient == (G2diagnosticClient{}) {
+//		fmt.Println(">>>>>>>>>>>>>>> Getting G2diagnosticClient")
+//
+//
+//	}
+//	return g2diagnosticClient
+//}
+
+func getTestObject(ctx context.Context) g2d.G2diagnostic {
+	if g2diagnostic == nil {
+
 		fmt.Println(">>>>>>>>>>>>>>> Getting G2diagnosticClient")
 
 		grpcConnection := getGrpcConnection()
-		g2diagnosticClient = G2diagnosticClient{
+		g2diagnostic = &G2diagnosticClient{
 			G2DiagnosticGrpcClient: pb.NewG2DiagnosticClient(grpcConnection),
 		}
+
+		moduleName := "Test module name"
+		verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
+		iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
+		if jsonErr != nil {
+			logger.Fatalf("Cannot construct system configuration: %v", jsonErr)
+		}
+
+		initErr := g2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
+		if initErr != nil {
+			logger.Fatalf("Cannot Init: %v", initErr)
+		}
 	}
-	return g2diagnosticClient
+
+	return g2diagnostic
 }
 
-func getTestObject(ctx context.Context) G2diagnosticClient {
-	g2diagnosticClient := getG2diagnosticClient()
-
-	moduleName := "Test module name"
-	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
-	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
-	if jsonErr != nil {
-		logger.Fatalf("Cannot construct system configuration: %v", jsonErr)
-	}
-
-	initErr := g2diagnosticClient.Init(ctx, moduleName, iniParams, verboseLogging)
-	if initErr != nil {
-		logger.Fatalf("Cannot Init: %v", initErr)
-	}
-
-	return g2diagnosticClient
-}
-
-func testError(test *testing.T, ctx context.Context, g2diagnostic G2diagnosticClient, err error) {
+func testError(test *testing.T, ctx context.Context, g2diagnostic G2diagnostic, err error) {
 	if err != nil {
 		test.Log("Error:", err.Error())
 		lastException, _ := g2diagnostic.GetLastException(ctx)
@@ -94,6 +101,21 @@ func TestGetObject(test *testing.T) {
 // ----------------------------------------------------------------------------
 // Test interface functions - names begin with "Test"
 // ----------------------------------------------------------------------------
+
+func TestCheckDBPerf(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnostic := getTestObject(ctx)
+	secondsToRun := 1
+	actual, err := g2diagnostic.CheckDBPerf(ctx, secondsToRun)
+	testError(test, ctx, g2diagnostic, err)
+	test.Log("Actual:", actual)
+}
+
+func TestClearLastException(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnostic := getTestObject(ctx)
+	g2diagnostic.ClearLastException(ctx)
+}
 
 func TestInit(test *testing.T) {
 	ctx := context.TODO()

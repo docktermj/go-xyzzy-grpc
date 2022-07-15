@@ -20,7 +20,6 @@
         --build-arg SENZING_ACCEPT_EULA=I_ACCEPT_THE_SENZING_EULA \
         --build-arg SENZING_APT_INSTALL_PACKAGE=senzingapi=${SENZING_VERSION_SENZINGAPI_BUILD} \
         --build-arg SENZING_DATA_VERSION=${SENZING_VERSION_SENZINGDATA} \
-        --no-cache \
         --tag senzing/installer:${SENZING_VERSION_SENZINGAPI} \
         https://github.com/senzing/docker-installer.git#main
     ```

@@ -37,27 +37,28 @@ func getGrpcConnection() *grpc.ClientConn {
 }
 
 func getTestObject(ctx context.Context) g2d.G2diagnostic {
-	//	if g2diagnostic == nil {
+	// FIXME: Make a reusable G2diagnosticClient.
+	if g2diagnostic == nil {
 
-	fmt.Println(">>>>>>>>>>>>>>> Getting G2diagnosticClient")
+		fmt.Println(">>>>>>>>>>>>>>> Getting G2diagnosticClient")
 
-	grpcConnection := getGrpcConnection()
-	g2diagnostic = &G2diagnosticClient{
-		G2DiagnosticGrpcClient: pb.NewG2DiagnosticClient(grpcConnection),
+		grpcConnection := getGrpcConnection()
+		g2diagnostic = &G2diagnosticClient{
+			G2DiagnosticGrpcClient: pb.NewG2DiagnosticClient(grpcConnection),
+		}
+
+		moduleName := "Test module name"
+		verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
+		iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
+		if jsonErr != nil {
+			logger.Fatalf("Cannot construct system configuration: %v", jsonErr)
+		}
+
+		initErr := g2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
+		if initErr != nil {
+			logger.Fatalf("Cannot Init: %v", initErr)
+		}
 	}
-
-	moduleName := "Test module name"
-	verboseLogging := 0 // 0 for no Senzing logging; 1 for logging
-	iniParams, jsonErr := g2configuration.BuildSimpleSystemConfigurationJson("")
-	if jsonErr != nil {
-		logger.Fatalf("Cannot construct system configuration: %v", jsonErr)
-	}
-
-	initErr := g2diagnostic.Init(ctx, moduleName, iniParams, verboseLogging)
-	if initErr != nil {
-		logger.Fatalf("Cannot Init: %v", initErr)
-	}
-	//	}
 	return g2diagnostic
 }
 
@@ -123,13 +124,6 @@ func TestClearLastException(test *testing.T) {
 //	err = g2diagnostic.CloseEntityListBySize(ctx, aHandle)
 //	testError(test, ctx, g2diagnostic, err)
 //}
-
-func TestDestroy(test *testing.T) {
-	ctx := context.TODO()
-	g2diagnostic := getTestObject(ctx)
-	err := g2diagnostic.Destroy(ctx)
-	testError(test, ctx, g2diagnostic, err)
-}
 
 func TestFindEntitiesByFeatureIDs(test *testing.T) {
 	ctx := context.TODO()
@@ -311,5 +305,16 @@ func TestReinit(test *testing.T) {
 	g2diagnostic := getTestObject(ctx)
 	initConfigID := int64(4019066234)
 	err := g2diagnostic.Reinit(ctx, initConfigID)
+	testError(test, ctx, g2diagnostic, err)
+}
+
+// ----------------------------------------------------------------------------
+// Finis
+// ----------------------------------------------------------------------------
+
+func TestDestroy(test *testing.T) {
+	ctx := context.TODO()
+	g2diagnostic := getTestObject(ctx)
+	err := g2diagnostic.Destroy(ctx)
 	testError(test, ctx, g2diagnostic, err)
 }

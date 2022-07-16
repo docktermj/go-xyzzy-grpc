@@ -4,22 +4,31 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"runtime"
-	"strconv"
-
-	"github.com/docktermj/g2-sdk-go/g2diagnostic"
+	sdkG2diagnostic "github.com/docktermj/g2-sdk-go/g2diagnostic"
 	pb "github.com/docktermj/go-xyzzy-grpc/g2diagnostic"
 	"github.com/docktermj/go-xyzzy-helpers/logger"
 	"github.com/docktermj/go-xyzzy-helpers/logmessage"
+	"runtime"
+	"strconv"
+	"sync"
+)
+
+var (
+	g2diagnostic *sdkG2diagnostic.G2diagnosticImpl
+	once         sync.Once
 )
 
 // ----------------------------------------------------------------------------
 // Internal methods - names begin with lower case
 // ----------------------------------------------------------------------------
 
-func getG2diagnostic() *g2diagnostic.G2diagnosticImpl {
-	result := g2diagnostic.G2diagnosticImpl{}
-	return &result
+// Singleton pattern for g2diagnostic.
+// See https://medium.com/golang-issue/how-singleton-pattern-works-with-golang-2fdd61cd5a7f
+func getG2diagnostic() *sdkG2diagnostic.G2diagnosticImpl {
+	once.Do(func() {
+		g2diagnostic = &sdkG2diagnostic.G2diagnosticImpl{}
+	})
+	return g2diagnostic
 }
 
 func traceEnter(messageNumber int, request interface{}) {

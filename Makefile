@@ -40,9 +40,9 @@ default: help
 
 CGO_CFLAGS = \
 	-I${SENZING_G2_DIR}/sdk/c
-	
+
 # Flags for
-	
+
 CGO_LDFLAGS = \
 	-L${SENZING_G2_DIR}/lib \
 	-lanalytics \
@@ -189,14 +189,29 @@ build: dependencies \
 test:
 	@go test -v $(GO_PACKAGE_NAME)/...
 
+
+.PHONY: test-g2diagnostic-client
+test-g2diagnostic-client:
+	go test -v $(GO_PACKAGE_NAME)/g2diagnosticclient
+
+
+.PHONY: test-g2diagnostic-server
+test-g2diagnostic-server:
+	go test -v $(GO_PACKAGE_NAME)/g2diagnosticserver
+
 # -----------------------------------------------------------------------------
 # Run
 # -----------------------------------------------------------------------------
 
-.PHONY: run
-run:
-	@target/linux/$(PROGRAM_NAME)
-	
+.PHONY: run-g2diagnostic-client
+run-g2diagnostic-client:
+	go run g2diagnosticclientcli/main.go
+
+
+.PHONY: run-g2diagnostic-server
+run-g2diagnostic-server:
+	go run g2diagnosticservercli/main.go
+
 # -----------------------------------------------------------------------------
 # docker-build
 #  - https://docs.docker.com/engine/reference/commandline/build/
@@ -213,6 +228,7 @@ docker-build:
 		--tag $(DOCKER_IMAGE_NAME) \
 		--tag $(DOCKER_IMAGE_NAME):$(BUILD_VERSION) \
 		.
+
 
 .PHONY: docker-builder
 docker-builder:
